@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DPlayer Example</title>
+    <script src="jquery.min.js" type="application/javascript"></script>
+    <script src="hls.min.js" type="application/javascript"></script>
+    <script src="DPlayer.min.js" type="application/javascript"></script>
+    <link href="DPlayer.min.css" type="text/css" rel="stylesheet"/>
+</head>
+<body>
+<div id="dplayer-container"></div>
+<script>
+    // 创建 DPlayer 实例
+    const dp = new DPlayer({
+      container: document.getElementById('dplayer-container'),
+      autoplay:true,
+      volume: 0.7,
+      video: {
+        url: 'https://livedoc.cgtn.com/500d/prog_index.m3u8', // 替换为你的视频 URL
+      },
+    });
+
+    // 监听播放器事件
+    dp.on('play', () => {
+      console.log('视频开始播放');
+    });
+
+    dp.on('pause', () => {
+      console.log('视频暂停');
+    });
+
+    dp.on('ended', () => {
+      console.log('视频播放结束');
+    });
+   function inputClick (url) {
+    console.log('inputClick=>'+url);
+   }
+
+   function playUrl(url) {
+    console.log('playUrl=>'+url);
+     dp.switchVideo(url);
+   }
+
+   function startPlay() {
+     console.log('startPlay');
+     dp.play();
+   }
+    function postMsg() {
+     console.log('postMsg');
+     Print.postMessage('postMsg');
+   }
+</script>
+</body>
+</html>
