@@ -12,8 +12,7 @@ class StudyOne extends StatefulWidget {
   State<StudyOne> createState() => _StudyOneState();
 }
 
-///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
-///sk_test_51NjyvxCT0SlSybTscBEZggpy7z0KQfiSShDs7TJPit08Lqwa2A4VUkcWLmnlfUQiox4gJhmeV6YbLNs8Y9AXElvX00hK2Ix4Lw
+
 class _StudyOneState extends State<StudyOne> {
   final controller = OverlayPortalController();
   double top = 100;
