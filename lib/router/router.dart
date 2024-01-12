@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:videolist/model/simple_models.dart';
 import 'package:videolist/page/app/home_page.dart';
 import 'package:videolist/page/app/video_detail_page.dart';
+import 'package:videolist/page/study/study_one.dart';
 import 'package:videolist/widget/error_page.dart';
 
 part 'router.g.dart';
@@ -57,6 +58,7 @@ class RoutePath {
   static const String search = '/search';
   static const String searchResult = '/searchResult';
   static const String videoDetail = '/videoDetail';
+  static const String studyOne = '/studyOne';
 
   static const List<String> notLoginPages = [
     error404,
@@ -98,9 +100,19 @@ class SearchRoute extends GoRouteData {
 
 @TypedGoRoute<VideoDetailRoute>(path: RoutePath.videoDetail)
 class VideoDetailRoute extends GoRouteData {
-  final ListItemJson  $extra;
+  final ListItemJson $extra;
+
   const VideoDetailRoute(this.$extra);
+
   @override
   Widget build(BuildContext context, GoRouterState state) =>
-      VideoDetailPage(item:  $extra);
+      VideoDetailPage(item: $extra);
+}
+
+@TypedGoRoute<StudyOneRoute>(path: RoutePath.studyOne)
+class StudyOneRoute extends GoRouteData {
+  const StudyOneRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) => const StudyOne();
 }

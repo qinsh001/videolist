@@ -33,8 +33,6 @@ class DioUtils {
     return value;
   }
 
-
-
   static Future<T> postUrl<T>({
     required ResponseBodyT<T> responseBodyT,
     required String path,
@@ -60,6 +58,10 @@ class DioUtils {
     return value;
   }
 
+  static Future<Response> downloadFile(String urlPath, dynamic savePath,{ProgressCallback? onReceiveProgress}) async {
+    final result = await dio.download(urlPath, savePath,onReceiveProgress: onReceiveProgress);
+    return result;
+  }
 
   static RequestOptions _setStreamType<T>(RequestOptions requestOptions) {
     if (T != dynamic &&

@@ -6,6 +6,7 @@ import 'package:logger/logger.dart';
 import 'package:videolist/utils/app_utils.dart';
 import 'package:videolist/network/dio_utils.dart';
 import 'package:videolist/network/x_http_utils.dart';
+import 'package:videolist/utils/log_extensions.dart';
 
 import '../model/simple_models.dart';
 

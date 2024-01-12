@@ -133,7 +133,6 @@ class AppUtils {
   }
   static List<LiveModelItem> getVideoUrls(dynamic vodPlayUrl) {
     if (vodPlayUrl is String &&
-        vodPlayUrl.contains("#") &&
         vodPlayUrl.contains("\$")) {
       final parts = vodPlayUrl
           .split("\$\$\$")
@@ -147,9 +146,10 @@ class AppUtils {
     return [];
   }
 
+  /// 正片$https:\/\/cdn.wls911.com:777\/18846be7\/index.m3u8
+  /// $区分标题和url  $$$来区分不同的的资源的  #来区分同一个资源的每一集
   static bool isOkPlayUrl(dynamic vodPlayUrl) {
     if (vodPlayUrl is String &&
-        vodPlayUrl.contains("#") &&
         vodPlayUrl.contains("\$") &&
         isM3u8(vodPlayUrl)) {
       return true;
@@ -157,6 +157,8 @@ class AppUtils {
       return false;
     }
   }
+
+
 
   static bool isM3u8(String url) {
     return url.contains("m3u8");

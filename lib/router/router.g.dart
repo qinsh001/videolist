@@ -11,6 +11,7 @@ List<RouteBase> get $appRoutes => [
       $searchResultRoute,
       $searchRoute,
       $videoDetailRoute,
+      $studyOneRoute,
     ];
 
 RouteBase get $topRoute => GoRouteData.$route(
@@ -108,4 +109,26 @@ extension $VideoDetailRouteExtension on VideoDetailRoute {
 
   void replace(BuildContext context) =>
       context.replace(location, extra: $extra);
+}
+
+RouteBase get $studyOneRoute => GoRouteData.$route(
+      path: '/studyOne',
+      factory: $StudyOneRouteExtension._fromState,
+    );
+
+extension $StudyOneRouteExtension on StudyOneRoute {
+  static StudyOneRoute _fromState(GoRouterState state) => const StudyOneRoute();
+
+  String get location => GoRouteData.$location(
+        '/studyOne',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
 }

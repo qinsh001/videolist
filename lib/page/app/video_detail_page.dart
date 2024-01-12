@@ -57,6 +57,7 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
   Future<void> toggleVideo(int index) async {
     await _videoPlayerController1.dispose();
     videoUrl.value = videoUrls[index].url;
+    "videoUrl.value=${videoUrl.value}".log();
     await initializePlayer();
   }
 
