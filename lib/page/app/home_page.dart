@@ -273,7 +273,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: GridView.builder(
+      body: videos.isEmpty?const Center(child: CircularProgressIndicator()):GridView.builder(
         padding: const EdgeInsets.all(8),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 3,
