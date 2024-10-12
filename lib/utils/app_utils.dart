@@ -3,9 +3,11 @@ import 'dart:convert';
 
 import 'package:flutter/services.dart';
 import 'package:videolist/model/simple_models.dart';
+import 'package:videolist/network/x_http_utils.dart';
 import 'package:xml/xml.dart';
 
 import '../model/xml_models.dart';
+import 'package:http/http.dart' as http;
 
 class AppUtils {
   static bool isUrl(String url) {
@@ -131,9 +133,9 @@ class AppUtils {
       return false;
     }
   }
+
   static List<LiveModelItem> getVideoUrls(dynamic vodPlayUrl) {
-    if (vodPlayUrl is String &&
-        vodPlayUrl.contains("\$")) {
+    if (vodPlayUrl is String && vodPlayUrl.contains("\$")) {
       final parts = vodPlayUrl
           .split("\$\$\$")
           .where((element) => AppUtils.isM3u8(element));
@@ -144,6 +146,15 @@ class AppUtils {
       }).toList();
     }
     return [];
+  }
+
+  static ({bool isJson, dynamic data}) getDataByJson(String jsonString) {
+    try {
+      final decoded = jsonDecode(jsonString);
+      return (isJson: true, data: decoded);
+    } catch (e) {
+      return (isJson: false, data: jsonString);
+    }
   }
 
   /// 正片$https:\/\/cdn.wls911.com:777\/18846be7\/index.m3u8
@@ -158,9 +169,39 @@ class AppUtils {
     }
   }
 
-
-
   static bool isM3u8(String url) {
     return url.contains("m3u8");
+  }
+
+  static Future<List<M3UEntry>> parseM3UFromUrl(String url) async {
+    final response = await XHttpUtils.get<String>(url);
+    final lines = LineSplitter.split(response!).toList();
+    final entries = <M3UEntry>[];
+    M3UEntry currentEntry = M3UEntry();
+    for (final line in lines) {
+      if (line.startsWith('#EXTINF:')) {
+        // 解析扩展信息
+        final infoMatch = RegExp(r'(?:tvg-id="(.*?)")?\s*'
+                r'(?:tvg-name="(.*?)")?\s*'
+                r'(?:tvg-logo="(.*?)")?\s*'
+                r'(?:group-title="(.*?)")?\s*'
+                r'(?:,(.*))?$')
+            .firstMatch(line);
+        if (infoMatch != null) {
+          currentEntry.tvgId = infoMatch.group(1) ?? '';
+          currentEntry.tvgName = infoMatch.group(2) ?? '';
+          currentEntry.logo = infoMatch.group(3) ?? '';
+          currentEntry.groupTitle = infoMatch.group(4) ?? '';
+          currentEntry.title = infoMatch.group(5) ?? '';
+        }
+      } else if (!line.startsWith('#') && line.trim().isNotEmpty) {
+        // 解析播放URL
+        currentEntry.playUrl = line.trim();
+        entries.add(currentEntry);
+        currentEntry = M3UEntry();
+      }
+    }
+
+    return entries;
   }
 }

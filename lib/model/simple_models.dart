@@ -1930,3 +1930,21 @@ class LiveModel {
 
   LiveModel(this.key);
 }
+
+class M3UEntry {
+  String title = '';
+  String logo = '';
+  String groupTitle = '';
+  String tvgId = '';
+  String tvgName = '';
+  String playUrl = '';
+
+  M3UEntry({
+    this.title = '',
+    this.logo = '',
+    this.groupTitle = '',
+    this.tvgId = '',
+    this.tvgName = '',
+    this.playUrl = '',
+  });
+}

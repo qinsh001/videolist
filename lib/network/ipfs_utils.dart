@@ -1,39 +1,44 @@
-import 'package:dio/dio.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:videolist/local/constant.dart';
 
 class IpfsUtils {
-  var dioClient = Dio()
-    ..options =
-        BaseOptions(headers: {'Authorization': 'Bearer ${ConstantS.apiKey}'});
-
-  String ipfs = 'https://ipfs.infura.io:5001/api/v0/add?pin=false';
+  final String _baseUrl = 'https://ipfs.infura.io:5001/api/v0';
+  final Map<String, String> _headers = {
+    'Authorization': 'Bearer ${ConstantS.apiKey}'
+  };
 
   Future<List<int>?> getByIpfsHash(String ipfsHash) async {
-    List<int>? image;
-    await dioClient.post('https://ipfs.infura.io:5001/api/v0/cat?arg=$ipfsHash',
-        options: Options(
-      responseDecoder: (responseBytes, options, responseBody) {
-        image = responseBytes;
-      },
-    ));
-    return image;
+    final url = Uri.parse('$_baseUrl/cat?arg=$ipfsHash');
+    final response = await http.post(url, headers: _headers);
+
+    if (response.statusCode == 200) {
+      return response.bodyBytes;
+    } else {
+      print('Failed to get IPFS content: ${response.statusCode}');
+      return null;
+    }
   }
 
   Future<String?> uploadImageToIPFS(String imagePath, String apiToken) async {
     try {
-      final formData = FormData.fromMap({
-        'file': await MultipartFile.fromFile(imagePath),
-      });
-      // 设置IPFS API请求头
-      // 发起上传请求
-      final response = await dioClient
-          .post('https://ipfs.infura.io:5001/api/v0/add', data: formData);
-      // 提取上传后的CID（内容识别码）
-      final cid = response.data['Hash'];
-      return cid;
+      final url = Uri.parse('$_baseUrl/add');
+      final request = http.MultipartRequest('POST', url)
+        ..headers.addAll(_headers)
+        ..files.add(await http.MultipartFile.fromPath('file', imagePath));
+
+      final streamedResponse = await request.send();
+      final response = await http.Response.fromStream(streamedResponse);
+
+      if (response.statusCode == 200) {
+        final responseData = json.decode(response.body);
+        return responseData['Hash'];
+      } else {
+        print('Failed to upload image to IPFS: ${response.statusCode}');
+        return null;
+      }
     } catch (e) {
-      // 处理错误
-      print('上传图片到IPFS时出错：$e');
+      print('Error uploading image to IPFS: $e');
       return null;
     }
   }

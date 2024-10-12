@@ -6,6 +6,8 @@ import 'package:go_router/go_router.dart';
 import 'package:videolist/model/simple_models.dart';
 import 'package:videolist/page/app/home_page.dart';
 import 'package:videolist/page/app/video_detail_page.dart';
+import 'package:videolist/page/app/video_page.dart';
+import 'package:videolist/page/study/study_324.dart';
 import 'package:videolist/page/study/study_one.dart';
 import 'package:videolist/widget/error_page.dart';
 
@@ -59,6 +61,9 @@ class RoutePath {
   static const String searchResult = '/searchResult';
   static const String videoDetail = '/videoDetail';
   static const String studyOne = '/studyOne';
+  static const videoPlayer = '/videoPlayer';
+  static const videoUrlListPage = '/videoUrlList';
+  static const study324 = '/study324';
 
   static const List<String> notLoginPages = [
     error404,
@@ -115,4 +120,33 @@ class StudyOneRoute extends GoRouteData {
 
   @override
   Widget build(BuildContext context, GoRouterState state) => const StudyOne();
+}
+
+@TypedGoRoute<VideoPlayerRoute>(path: RoutePath.videoPlayer)
+class VideoPlayerRoute extends GoRouteData {
+  final List<M3UEntry> $extra;
+
+  const VideoPlayerRoute(this.$extra);
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) => VideoKitPage(
+        urls: $extra,
+      );
+}
+
+@TypedGoRoute<VideoUrlListRoute>(path: RoutePath.videoUrlListPage)
+class VideoUrlListRoute extends GoRouteData {
+  const VideoUrlListRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      const VideoUrlListPage();
+}
+
+@TypedGoRoute<Study324Route>(path: RoutePath.study324)
+class Study324Route extends GoRouteData {
+  const Study324Route();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) => const Study324();
 }

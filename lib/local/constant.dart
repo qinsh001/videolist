@@ -10,6 +10,7 @@ class ConstantS{
    static const url8 = 'https://s.xlzys.com/play/BeX9WBma';
    static const apiKey = '';
    static const spKeyHistory = 'sp_key_history';
+   static const url9 = 'https://gitee.com/andoridityu/Live/raw/main/';
 
 
 

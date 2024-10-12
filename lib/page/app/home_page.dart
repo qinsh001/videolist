@@ -23,7 +23,31 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("TvBox"),
+        title: Text("TvBox"),
+        bottom: PreferredSize(preferredSize: Size.fromHeight(50), child: InkWell(
+          onTap: () {
+            const SearchRoute().push(context);
+          },
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 5,horizontal: 30),
+            width: double.infinity,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.grey.withOpacity(.3)),
+              borderRadius: const BorderRadius.all(Radius.circular(5.0)),
+            ),
+            child: const Text(
+              "搜索",
+              style: TextStyle(fontSize: 14),
+            ),
+          ),
+        )),
+        actions: [
+          TextButton(onPressed: (){
+            // const VideoUrlListRoute().push(context);
+            const Study324Route().push(context);
+          }, child: Text("福利"))
+        ],
       ),
       body: FutureBuilder(
         builder: (context, value) {
@@ -57,24 +81,6 @@ class _VideoPageState extends State<VideoPage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: InkWell(
-          onTap: () {
-            const SearchRoute().push(context);
-          },
-          child: Container(
-            padding: const EdgeInsets.symmetric(vertical: 5),
-            width: double.infinity,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey.withOpacity(.3)),
-              borderRadius: const BorderRadius.all(Radius.circular(5.0)),
-            ),
-            child: const Text(
-              "搜索",
-              style: TextStyle(fontSize: 14),
-            ),
-          ),
-        ),
         bottom: TabBar(
           indicatorSize: TabBarIndicatorSize.tab,
           padding: EdgeInsets.zero,
@@ -114,6 +120,7 @@ class _VideoItemPageState extends State<VideoItemPage>
     with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return ListView.builder(
       itemCount: widget.items.listInfo.length,
       itemBuilder: (BuildContext context, int index) {

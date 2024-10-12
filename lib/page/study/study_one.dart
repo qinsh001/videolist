@@ -1,9 +1,11 @@
 import 'dart:typed_data';
 
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:flutter/rendering.dart';
+import 'package:videolist/network/x_http_utils.dart';
 import 'package:videolist/utils/log_extensions.dart';
+
+import 'package:image_gallery_saver/image_gallery_saver.dart';
 
 class StudyOne extends StatefulWidget {
   const StudyOne({super.key});
@@ -12,18 +14,14 @@ class StudyOne extends StatefulWidget {
   State<StudyOne> createState() => _StudyOneState();
 }
 
-
 class _StudyOneState extends State<StudyOne> {
   final controller = OverlayPortalController();
   double top = 100;
 
   _saveNetworkImage() async {
-    var response = await Dio().get(
-        "https://qr.stripe.com/test_YWNjdF8xTmp5dnhDVDBTbFN5YlRzLF9QQW1McXhpOFdGR2JPQmliNjZYNzhLRGxKczliMnB40100quLTgczp.png?download=true&border=2",
-        options: Options(responseType: ResponseType.bytes));
-    final result = await ImageGallerySaver.saveImage(
-        Uint8List.fromList(response.data),
-        quality: 60);
+    var response = await XHttpUtils.get<Uint8List>(
+        "https://qr.stripe.com/test_YWNjdF8xTmp5dnhDVDBTbFN5YlRzLF9QQW1McXhpOFdGR2JPQmliNjZYNzhLRGxKczliMnB40100quLTgczp.png?download=true&border=2");
+    final result = await ImageGallerySaver.saveImage(response!, quality: 60);
     print(result);
   }
 
@@ -34,7 +32,6 @@ class _StudyOneState extends State<StudyOne> {
     super.initState();
     lifecycleListener = AppLifecycleListener();
   }
-
 
   @override
   void dispose() {
@@ -48,6 +45,9 @@ class _StudyOneState extends State<StudyOne> {
       appBar: AppBar(),
       body: Column(
         children: [
+          // PinnedHeaderSliver(),
+          // SliverResizingHeader(),
+          // SliverFloatingHeader(),
           TextButton(
             onPressed: () {
               if (controller.isShowing) {
